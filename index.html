@@ -1,0 +1,268 @@
+<!DOCTYPE html><!--initiate html -->
+<html lang="en"><!--initiate html-->
+<head>
+  <meta charset="UTF-8"><!--set html intrperpreting thingy-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--make website dynamic--> 
+  <title>Study Plan Generator</title><!--set title-->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }/*set body styles font, bg color, 
+    text color, padding, maximium width, 
+    margin, border radius, box shadow*/
+
+    h1 {
+      text-align: center;
+      color: #4A90E2;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }/* set header 1 text styles,
+    fomt size. color, text align center, 
+    margin */
+
+    .btn {
+      background-color: #4A90E2;
+      color: white;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+    }/* set button styles, bg color, font and font sizes*/
+
+    .btn:hover {
+      background-color: #357ABD;
+    }/*more button stuff */
+
+    .timetable {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+    }/*timetable styles */
+      text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+/* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
+.header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* Change the background color on mouse-over */
+.header a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Style the active/current link*/
+.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+/* Float the link section to the right */
+.header-right {
+  float: right;
+}
+    /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
+@media screen and (max-width: 500px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .header-right {
+    float: none;
+  }
+} /* end of header styles */
+  </style>
+</head>
+<body>
+ <div class="header"><!-- just a div for the header and navbar -->
+  <a href="#default" class="logo">Tool name</a>
+  <div class="header-right">
+    <a class="active" href="#home">Home</a>
+    <a href="/demo.txt">Contact</a>
+    <a href="/demo.txt">About</a>
+  </div><!-- navbar -->
+</div>
+  <h1>Study Plan Generator</h1>
+  <!-- Study Plan Form -->
+<form id="study-plan-form">
+    <!-- Range input for selecting study hours per day -->
+    <label for="study-hours">How many hours can you study per day?</label><br>
+    <input type="range" id="study-hours" name="study-hours" min="1" max="5" value="3">
+    <span id="study-hours-value">1-3 hours</span><br><br>
+
+    <!-- Core subjects (always included) -->
+    <label>Core Subjects (Included by Default):</label>
+    <p>Science, Math, Spanish, English, History, Irish</p>
+
+    <!-- Dropdown for selecting optional subjects -->
+    <label for="optional-subjects">Select Optional Subjects:</label><br>
+    <select id="optional-subjects" multiple>
+        <!-- List of optional subjects -->
+        <option value="Graphics">Graphics</option>
+        <option value="Business">Business</option>
+        <option value="Geography">Geography</option>
+        <option value="Wood Tech">Wood Tech</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Technology">Technology</option>
+        <option value="Music">Music</option>
+        <option value="Art">Art</option>
+        <option value="Home Economics">Home Economics</option>
+        <option value="Italian">Italian</option>
+        <option value="Accounting">Accounting</option>
+        <option value="Construction Studies">Construction Studies</option>
+                <option value="">(Select a subject)</option>
+    </select><br><br>
+
+    <!-- Button to generate the study plan -->
+    <button type="submit" class="btn">Generate Study Plan</button>
+</form>
+
+<!-- Study timetable display (initially hidden) -->
+<div id="timetable-container" style="display:none;">
+    <h2>Your Study Timetable</h2>
+    <table id="timetable" class="timetable">
+        <thead>
+            <tr>
+                <!-- Column headers for days of the week -->
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+        </thead>
+        <tbody></tbody> <!-- Table body where timetable rows will be inserted -->
+    </table>
+</div>
+<style>
+    /* Styles for the timetable */
+    .timetable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .timetable th, .timetable td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+        font-size: 1rem;
+    }
+</style>
+<script>
+// Update the weakest subject dropdown based on selected optional subjects
+document.getElementById("optional-subjects").addEventListener("change", function() {
+    // Get selected optional subjects
+    const selectedSubjects = Array.from(this.selectedOptions).map(option => option.value);
+    const weakestDropdown = document.getElementById("weakest-subject");
+
+    // Reset weakest subject dropdown
+    weakestDropdown.innerHTML = '<option value="">(Select a subject)</option>';
+
+    // Add all subjects (core + selected optional subjects) to the weakest subject dropdown
+    selectedSubjects.concat(["Science", "Math", "Spanish", "English", "History", "Irish"]).forEach(subject => {
+        let option = document.createElement("option");
+        option.value = subject;
+        option.textContent = subject;
+        weakestDropdown.appendChild(option);
+    });
+});
+
+// Handle study plan form submission
+document.getElementById("study-plan-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default form submission behavior
+
+    // Get user-selected study hours per day
+    const studyHours = parseInt(document.getElementById('study-hours').value);
+
+    // Get selected optional subjects
+    const optionalSubjects = Array.from(document.getElementById('optional-subjects').selectedOptions).map(option => option.value);
+
+    // Combine core subjects and selected optional subjects
+    const subjects = ["Science", "Math", "Spanish", "English", "History", "Irish"].concat(optionalSubjects);
+
+    // Get the weakest subject selected by the user
+    const weakestSubject = document.getElementById("weakest-subject").value;
+
+    // Select the timetable body where rows will be added
+    const timetableBody = document.querySelector("#timetable tbody");
+    timetableBody.innerHTML = ''; // Clear previous timetable
+
+    // Define days of the week
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    // Define study time slots (for weekdays and weekends)
+    const timeSlots = ["4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM"];
+
+    // Function to shuffle an array (randomize subject distribution)
+    function shuffleArray(array) {
+        let shuffled = array.slice(); // Copy array to avoid modifying original
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
+        }
+        return shuffled;
+    }
+
+    // Shuffle subjects to distribute them randomly
+    let shuffledSubjects = shuffleArray(subjects);
+    let subjectIndex = 0; // Keep track of subject rotation
+
+    // Loop through each study time slot
+    timeSlots.slice(0, studyHours).forEach(time => {
+        const row = document.createElement('tr'); // Create a new row for the timetable
+
+        // First column: time slot
+        const timeCell = document.createElement('td');
+        timeCell.textContent = time;
+        row.appendChild(timeCell);
+
+        // Add a study subject for each day of the week
+        days.forEach(day => {
+            let cell = document.createElement('td');
+
+            // Rotate subjects to ensure even distribution
+            let subject = shuffledSubjects[subjectIndex % shuffledSubjects.length];
+            subjectIndex++;
+
+            // Increase the chance of assigning the weakest subject (30% probability)
+            if (weakestSubject && Math.random() < 0.3) {
+                subject = weakestSubject;
+            }
+
+            // Assign subject to the cell
+            cell.textContent = subject;
+            row.appendChild(cell);
+        });
+
+        // Add the row to the timetable
+        timetableBody.appendChild(row);
+    });
+
+    // Show the generated timetable
+    document.getElementById("timetable-container").style.display = "block";
+});
+</script>
+</body>
+</html>
+
+   
