@@ -56,7 +56,7 @@
   border-radius: 4px;
 }
 
-/* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
+/* Style the logo link( some cool stuff */
 .header a.logo {
   font-size: 25px;
   font-weight: bold;
@@ -68,7 +68,7 @@
   color: black;
 }
 
-/* Style the active/current link*/
+/* Style the current link*/
 .header a.active {
   background-color: dodgerblue;
   color: white;
@@ -78,7 +78,7 @@
 .header-right {
   float: right;
 }
-    /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
+    /* Add media queries for responsiveness */
 @media screen and (max-width: 500px) {
   .header a {
     float: none;
@@ -135,13 +135,13 @@
     <button type="submit" class="btn">Generate Study Plan</button>
 </form>
 
-<!-- Study timetable display (initially hidden) -->
+<!-- Study timetable display (first hidden) -->
 <div id="timetable-container" style="display:none;">
     <h2>Your Study Timetable</h2>
     <table id="timetable" class="timetable">
         <thead>
             <tr>
-                <!-- Column headers for days of the week -->
+                <!-- headers for days of the week -->
                 <th>Time</th>
                 <th>Monday</th>
                 <th>Tuesday</th>
@@ -191,19 +191,19 @@ document.getElementById("optional-subjects").addEventListener("change", function
 document.getElementById("study-plan-form").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent default form submission behavior
 
-    // Get user-selected study hours per day
+    // Get study hours per day
     const studyHours = parseInt(document.getElementById('study-hours').value);
 
-    // Get selected optional subjects
+    // Get  optional subjects
     const optionalSubjects = Array.from(document.getElementById('optional-subjects').selectedOptions).map(option => option.value);
 
-    // Combine core subjects and selected optional subjects
+    // Combine core subjects and  optional subjects
     const subjects = ["Science", "Math", "Spanish", "English", "History", "Irish"].concat(optionalSubjects);
 
-    // Get the weakest subject selected by the user
+    // Get the weakest from the user
     const weakestSubject = document.getElementById("weakest-subject").value;
 
-    // Select the timetable body where rows will be added
+    //   timetable thing where rows will be added
     const timetableBody = document.querySelector("#timetable tbody");
     timetableBody.innerHTML = ''; // Clear previous timetable
 
@@ -213,7 +213,7 @@ document.getElementById("study-plan-form").addEventListener("submit", function(e
     // Define study time slots (for weekdays and weekends)
     const timeSlots = ["4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM"];
 
-    // Function to shuffle an array (randomize subject distribution)
+    // Function to shuffle an array (randomize subject plaement)
     function shuffleArray(array) {
         let shuffled = array.slice(); // Copy array to avoid modifying original
         for (let i = shuffled.length - 1; i > 0; i--) {
@@ -244,7 +244,7 @@ document.getElementById("study-plan-form").addEventListener("submit", function(e
             let subject = shuffledSubjects[subjectIndex % shuffledSubjects.length];
             subjectIndex++;
 
-            // Increase the chance of assigning the weakest subject (30% probability)
+            // Increase the chance of assigning the weakest subject (1/3)
             if (weakestSubject && Math.random() < 0.3) {
                 subject = weakestSubject;
             }
